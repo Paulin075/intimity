@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* INTIMITY Design System - Thème cycle menstruel féminin */
+
+@layer base {
+  :root {
+    --background: 355 100% 98%;
+    --foreground: 330 15% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 330 15% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 330 15% 15%;
+
+    /* Rose principal pour INTIMITY */
+    --primary: 340 75% 55%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 340 85% 65%;
+
+    /* Rose doux secondaire */
+    --secondary: 350 60% 95%;
+    --secondary-foreground: 330 15% 15%;
+
+    --muted: 350 30% 96%;
+    --muted-foreground: 330 10% 45%;
+
+    /* Accent corail chaleureux */
+    --accent: 15 85% 65%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 340 30% 90%;
+    --input: 340 30% 94%;
+    --ring: 340 75% 55%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar rose doux */
+    --sidebar-background: 350 60% 97%;
+    --sidebar-foreground: 330 15% 25%;
+    --sidebar-primary: 340 75% 55%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 350 40% 92%;
+    --sidebar-accent-foreground: 330 15% 25%;
+    --sidebar-border: 340 25% 88%;
+    --sidebar-ring: 340 75% 55%;
+
+    /* Gradients INTIMITY */
+    --gradient-primary: linear-gradient(135deg, hsl(340 75% 55%), hsl(15 85% 65%));
+    --gradient-soft: linear-gradient(180deg, hsl(350 60% 98%), hsl(340 40% 96%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(350 30% 98%));
+    
+    /* Ombres douces */
+    --shadow-soft: 0 4px 20px hsl(340 75% 55% / 0.15);
+    --shadow-card: 0 2px 12px hsl(340 30% 85% / 0.3);
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 330 20% 8%;
+    --foreground: 350 30% 92%;
+
+    --card: 330 18% 10%;
+    --card-foreground: 350 30% 92%;
+
+    --popover: 330 18% 10%;
+    --popover-foreground: 350 30% 92%;
+
+    --primary: 340 75% 60%;
+    --primary-foreground: 330 20% 8%;
+    --primary-glow: 340 85% 70%;
+
+    --secondary: 330 15% 15%;
+    --secondary-foreground: 350 30% 92%;
+
+    --muted: 330 15% 12%;
+    --muted-foreground: 350 15% 65%;
+
+    --accent: 15 75% 60%;
+    --accent-foreground: 330 20% 8%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 350 30% 92%;
+
+    --border: 330 15% 18%;
+    --input: 330 15% 15%;
+    --ring: 340 75% 60%;
+
+    --sidebar-background: 330 18% 9%;
+    --sidebar-foreground: 350 25% 85%;
+    --sidebar-primary: 340 75% 60%;
+    --sidebar-primary-foreground: 330 20% 8%;
+    --sidebar-accent: 330 15% 12%;
+    --sidebar-accent-foreground: 350 25% 85%;
+    --sidebar-border: 330 15% 15%;
+    --sidebar-ring: 340 75% 60%;
+
+    /* Dark gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(340 75% 60%), hsl(15 75% 60%));
+    --gradient-soft: linear-gradient(180deg, hsl(330 18% 10%), hsl(330 15% 12%));
+    --gradient-card: linear-gradient(145deg, hsl(330 18% 11%), hsl(330 15% 9%));
+    
+    --shadow-soft: 0 4px 20px hsl(340 75% 30% / 0.3);
+    --shadow-card: 0 2px 12px hsl(330 20% 5% / 0.5);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  /* Classes utilitaires INTIMITY */
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .gradient-soft {
+    background: var(--gradient-soft);
+  }
+  
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+  
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+
+  /* Animations douces */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
