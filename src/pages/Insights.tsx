@@ -98,8 +98,8 @@ export default function InsightsScreen() {
     if (cycles.length < 2) return 'Insufficient data';
     
     const cycleLengths = cycles
-      .filter(c => c.duree)
-      .map(c => c.duree)
+      .filter(c => c.duree !== null && c.duree !== undefined)
+      .map(c => c.duree!)
       .sort((a, b) => a - b);
     
     if (cycleLengths.length < 2) return 'Insufficient data';

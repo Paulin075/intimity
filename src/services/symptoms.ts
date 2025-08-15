@@ -1,20 +1,5 @@
 import { supabase } from '../integrations/supabase/client';
-
-export interface Symptom {
-  id: string;
-  utilisatrice_id: string;
-  date: string;
-  type: string;
-  intensite: number;
-  notes?: string | null | undefined;
-}
-
-export interface SymptomInput {
-  date: string;
-  type: string;
-  intensite: number;
-  notes?: string | null | undefined;
-}
+import { Symptom, SymptomInput } from '../types';
 
 export const symptomsService = {
   // Récupérer tous les symptômes d'une utilisatrice
@@ -32,7 +17,7 @@ export const symptomsService = {
       }
 
       return (data || [])
-        .filter((s): s is Symptom => !!s.utilisatrice_id && s.intensite != null)
+        .filter((s): s is Symptom => !!s.utilisatrice_id && s.intensite != null && s.notes !== undefined)
         .map(s => ({
           ...s,
           utilisatrice_id: s.utilisatrice_id ?? '',
@@ -146,7 +131,7 @@ export const symptomsService = {
       }
 
       return (data || [])
-        .filter((s): s is Symptom => !!s.utilisatrice_id && s.intensite != null)
+        .filter((s): s is Symptom => !!s.utilisatrice_id && s.intensite != null && s.notes !== undefined)
         .map(s => ({
           ...s,
           utilisatrice_id: s.utilisatrice_id ?? '',

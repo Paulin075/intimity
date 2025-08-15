@@ -1,9 +1,19 @@
 import * as React from "react"
 
-import type {
-  ToastActionElement,
-  ToastProps,
-} from "@/components/ui/toast"
+// Types temporaires pour les toasts
+export interface ToastActionElement {
+  altText?: string;
+  action?: () => void;
+}
+
+export interface ToastProps {
+  id?: string;
+  title?: string;
+  description?: string;
+  action?: ToastActionElement;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
 
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
@@ -33,6 +43,7 @@ type ActionType = typeof actionTypes
 
 type Action =
   | {
+    
       type: ActionType["ADD_TOAST"]
       toast: ToasterToast
     }
@@ -155,7 +166,7 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
-      onOpenChange: (open) => {
+      onOpenChange: (open: boolean) => {
         if (!open) dismiss()
       },
     },

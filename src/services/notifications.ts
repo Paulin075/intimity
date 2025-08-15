@@ -2,10 +2,10 @@ import { supabase } from '../integrations/supabase/client';
 
 export interface Notification {
   id: string;
-  utilisatrice_id: string;
+  utilisatrice_id: string | null;
   type: string;
   programme_le: string;
-  active: boolean;
+  active: boolean | null;
 }
 
 export interface NotificationInput {

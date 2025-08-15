@@ -454,7 +454,7 @@ export default function CalendarScreen() {
                   }}
                   placeholder="5"
                   placeholderTextColor={theme === 'dark' ? darkColors.textSecondary : '#9ca3af'}
-                  value={newCycle.duree !== undefined ? newCycle.duree.toString() : ''}
+                  value={newCycle.duree !== undefined && newCycle.duree !== null ? newCycle.duree.toString() : ''}
                   onChangeText={(text) => setNewCycle({ ...newCycle, duree: text ? parseInt(text) : undefined })}
                   keyboardType="numeric"
                 />

@@ -6,7 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../App';
 import { useAuth } from '../hooks/use-auth';
-import { symptomsService, SymptomInput } from '../services/symptoms';
+import { symptomsService } from '../services/symptoms';
+import { SymptomInput } from '../types';
 import { useTheme } from '../hooks/use-theme';
 import type { Symptom, UserPreferences, AuthUser } from '../types';
 import { palettes } from '../theme/palette';
@@ -233,8 +234,8 @@ export default function SymptomsScreen() {
                   </View>
                   
                   <View style={{ flexDirection: 'row', gap: 8 }}>
-                    <View style={{ paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10, backgroundColor: getIntensityColor(symptom.intensite) + '20' }}>
-                      <Text style={{ fontSize: 12, fontWeight: 'semibold', color: getIntensityColor(symptom.intensite) }}>
+                                          <View style={{ paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10, backgroundColor: getIntensityColor(symptom.intensite || 0) + '20' }}>
+                      <Text style={{ fontSize: 12, fontWeight: 'semibold', color: getIntensityColor(symptom.intensite || 0) }}>
                         {symptom.intensite}/10
                       </Text>
                     </View>

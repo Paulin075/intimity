@@ -40,7 +40,7 @@ export default function AuthScreen() {
           // Redirige vers l’onboarding santé si non complété, sinon Dashboard
           setTimeout(() => {
             if (preferences && preferences.onboardingCompleted === false) {
-              navigation.navigate('OnboardingSante');
+              navigation.navigate('Onboarding');
             } else {
               navigation.navigate('Dashboard');
             }

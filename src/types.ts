@@ -20,24 +20,26 @@ export interface CycleInput {
 
 export interface Symptom {
   id: string;
-  utilisatrice_id: string;
+  utilisatrice_id: string | null;
   date: string;
   type: string;
-  intensite: number;
-  notes?: string | null | undefined;
+  intensite: number | null;
+  notes: string | null;
 }
 
 export interface SymptomInput {
   date: string;
   type: string;
   intensite: number;
-  notes?: string | null | undefined;
+  notes?: string | null;
 }
 
 export interface UserPreferences {
   cycleLength: number;
   periodLength: number;
   lastPeriod: string;
+  taille?: number;
+  poids?: number;
   notifications: boolean;
   reminders: boolean;
   onboardingCompleted: boolean;

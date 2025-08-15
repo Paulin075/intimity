@@ -182,6 +182,38 @@ export const cyclesService = {
       const cycles = await this.getCycles(userId);
       
       if (cycles.length === 0) {
+        // Si aucun cycle n'existe, essayer de créer un cycle initial basé sur les préférences
+        try {
+          const { data: preferences } = await supabase
+            .from('user_preferences')
+            .select('*')
+            .eq('user_id', userId)
+            .single();
+          
+          if (preferences && preferences.last_period) {
+            const lastPeriodDate = new Date(preferences.last_period);
+            const today = new Date();
+            
+            // Créer un cycle initial basé sur la dernière période
+            const initialCycle = await this.addCycle(userId, {
+              debut: preferences.last_period,
+              fin: null, // Cycle en cours
+              duree: preferences.cycle_length || 28,
+            });
+            
+            if (initialCycle) {
+              console.log('Cycle initial créé:', initialCycle);
+              // Recharger les cycles après création
+              const updatedCycles = await this.getCycles(userId);
+              if (updatedCycles.length > 0) {
+                return this.calculatePredictionsFromCycles(updatedCycles);
+              }
+            }
+          }
+        } catch (error) {
+          console.log('Impossible de créer un cycle initial:', error);
+        }
+        
         return {
           nextPeriod: null,
           nextOvulation: null,
@@ -192,43 +224,7 @@ export const cyclesService = {
         };
       }
 
-      // Calculer la durée moyenne du cycle
-      const completedCycles = cycles.filter(c => c.fin && c.duree);
-      const averageCycleLength = completedCycles.length > 0 
-        ? completedCycles.reduce((sum, c) => sum + (c.duree || 0), 0) / completedCycles.length
-        : 28;
-
-      // Trouver le dernier cycle
-      const lastCycle = cycles[0];
-      const lastPeriodStart = new Date(lastCycle.debut);
-      const today = new Date();
-      // Calcul du jour du cycle
-      const currentDay = Math.max(1, Math.min(Math.ceil((today.getTime() - lastPeriodStart.getTime()) / (1000 * 60 * 60 * 24)) + 1, Math.round(averageCycleLength)));
-      
-      // Prédire la prochaine période
-      const nextPeriodStart = new Date(lastPeriodStart);
-      nextPeriodStart.setDate(nextPeriodStart.getDate() + averageCycleLength);
-
-      // Prédire l'ovulation (14 jours avant la prochaine période)
-      const nextOvulation = new Date(nextPeriodStart);
-      nextOvulation.setDate(nextOvulation.getDate() - 14);
-
-      // Déterminer la fertilité
-      let fertilityLevel: 'Faible' | 'Moyenne' | 'Élevée' = 'Faible';
-      // Fenêtre fertile = ovulation +/- 2 jours
-      const ovulationDay = Math.round(averageCycleLength) - 14;
-      if (currentDay >= ovulationDay - 2 && currentDay <= ovulationDay + 2) {
-        fertilityLevel = currentDay === ovulationDay ? 'Élevée' : 'Moyenne';
-      }
-
-      return {
-        nextPeriod: nextPeriodStart.toISOString().split('T')[0],
-        nextOvulation: nextOvulation.toISOString().split('T')[0],
-        averageCycleLength: Math.round(averageCycleLength),
-        averagePeriodLength: 5, // Valeur par défaut
-        currentDay,
-        fertilityLevel,
-      };
+      return this.calculatePredictionsFromCycles(cycles);
     } catch (error) {
       console.error('Erreur lors du calcul des prédictions:', error);
       return {
@@ -240,5 +236,47 @@ export const cyclesService = {
         fertilityLevel: 'Faible',
       };
     }
+  },
+
+  // Calculer les prédictions à partir des cycles existants
+  calculatePredictionsFromCycles(cycles: Cycle[]): any {
+
+    // Calculer la durée moyenne du cycle
+    const completedCycles = cycles.filter(c => c.fin && c.duree);
+    const averageCycleLength = completedCycles.length > 0 
+      ? completedCycles.reduce((sum, c) => sum + (c.duree || 0), 0) / completedCycles.length
+      : 28;
+
+    // Trouver le dernier cycle
+    const lastCycle = cycles[0];
+    const lastPeriodStart = new Date(lastCycle.debut);
+    const today = new Date();
+    // Calcul du jour du cycle
+    const currentDay = Math.max(1, Math.min(Math.ceil((today.getTime() - lastPeriodStart.getTime()) / (1000 * 60 * 60 * 24)) + 1, Math.round(averageCycleLength)));
+    
+    // Prédire la prochaine période
+    const nextPeriodStart = new Date(lastPeriodStart);
+    nextPeriodStart.setDate(nextPeriodStart.getDate() + averageCycleLength);
+
+    // Prédire l'ovulation (14 jours avant la prochaine période)
+    const nextOvulation = new Date(nextPeriodStart);
+    nextOvulation.setDate(nextOvulation.getDate() - 14);
+
+    // Déterminer la fertilité
+    let fertilityLevel: 'Faible' | 'Moyenne' | 'Élevée' = 'Faible';
+    // Fenêtre fertile = ovulation +/- 2 jours
+    const ovulationDay = Math.round(averageCycleLength) - 14;
+    if (currentDay >= ovulationDay - 2 && currentDay <= ovulationDay + 2) {
+      fertilityLevel = currentDay === ovulationDay ? 'Élevée' : 'Moyenne';
+    }
+
+    return {
+      nextPeriod: nextPeriodStart.toISOString().split('T')[0],
+      nextOvulation: nextOvulation.toISOString().split('T')[0],
+      averageCycleLength: Math.round(averageCycleLength),
+      averagePeriodLength: 5, // Valeur par défaut
+      currentDay,
+      fertilityLevel,
+    };
   },
 }; 
